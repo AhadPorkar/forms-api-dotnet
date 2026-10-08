@@ -1,0 +1,10 @@
+config:
+  default: true
+  MD013: false      # line length: tables and links are easier to read unwrapped
+  MD033: false      # inline HTML is used for <br/> in Mermaid labels
+  MD024:
+    siblings_only: true
+ignores:
+  - "**/bin/**"
+  - "**/obj/**"
+  - "**/TestResults/**"
