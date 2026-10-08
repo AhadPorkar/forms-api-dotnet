@@ -1,0 +1,42 @@
+{
+  "key": "leave-request",
+  "title": "Leave request",
+  "description": "Employees request annual, sick or unpaid leave.",
+  "schema": {
+    "fields": [
+      { "key": "employeeName", "label": "Full name", "type": "text", "required": true,
+        "constraints": { "minLength": 2, "maxLength": 100 } },
+      { "key": "email", "label": "Work email", "type": "email", "required": true },
+      { "key": "leaveType", "label": "Type of leave", "type": "select", "required": true,
+        "options": [
+          { "value": "annual", "label": "Annual leave" },
+          { "value": "sick", "label": "Sick leave" },
+          { "value": "unpaid", "label": "Unpaid leave" },
+          { "value": "other", "label": "Other" }
+        ] },
+      { "key": "otherReason", "label": "Reason", "type": "longText", "required": true,
+        "constraints": { "maxLength": 500 },
+        "visibleWhen": { "field": "leaveType", "operator": "equals", "value": "other" } },
+      { "key": "startDate", "label": "First day", "type": "date", "required": true },
+      { "key": "endDate", "label": "Last day", "type": "date", "required": true },
+      { "key": "workingDays", "label": "Working days", "type": "integer", "required": true,
+        "constraints": { "min": 1, "max": 30 } },
+      { "key": "certificateNumber", "label": "Medical certificate number", "type": "text",
+        "helpText": "Format: two letters, a dash and six digits, for example AB-123456.",
+        "constraints": { "pattern": "[A-Z]{2}-[0-9]{6}" },
+        "visibleWhen": { "field": "leaveType", "operator": "equals", "value": "sick" },
+        "requiredWhen": { "field": "workingDays", "operator": "greaterThan", "value": 3 } },
+      { "key": "notify", "label": "Also notify", "type": "multiSelect",
+        "options": [
+          { "value": "manager", "label": "My manager" },
+          { "value": "hr", "label": "HR" },
+          { "value": "team", "label": "My team" }
+        ],
+        "constraints": { "maxItems": 2 } }
+    ],
+    "rules": [
+      { "id": "end-after-start", "left": "endDate", "operator": "greaterThanOrEqual", "right": "startDate",
+        "message": "The last day cannot be before the first day." }
+    ]
+  }
+}
