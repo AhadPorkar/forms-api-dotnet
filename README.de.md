@@ -43,6 +43,12 @@ bash scripts/smoke-test.sh       # End-to-End-Prüfung: anlegen, veröffentliche
 Die interaktive API-Referenz finden Sie unter <http://localhost:8080/scalar>, das OpenAPI-Dokument unter
 `/openapi/v1.json`.
 
+Jedes Release veröffentlicht außerdem ein fertiges Image, sodass der Build entfallen kann:
+
+```bash
+docker pull ghcr.io/ahadporkar/forms-api-dotnet:1.0.0   # ebenfalls als 1.0 und latest getaggt
+```
+
 Die API aus dem Quellcode gegen die Compose-Datenbank starten:
 
 ```bash

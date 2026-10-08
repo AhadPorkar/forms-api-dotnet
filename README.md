@@ -42,6 +42,12 @@ bash scripts/smoke-test.sh       # end-to-end check: create, publish, autosave, 
 Open <http://localhost:8080/scalar> for the interactive API reference. The OpenAPI document is at
 `/openapi/v1.json`.
 
+Every release also publishes a ready-built image, so you can skip the build:
+
+```bash
+docker pull ghcr.io/ahadporkar/forms-api-dotnet:1.0.0   # also tagged 1.0 and latest
+```
+
 To run the API from source against the Compose database:
 
 ```bash
