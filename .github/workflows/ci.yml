@@ -81,7 +81,7 @@ jobs:
         run: docker compose up --detach --build --wait
 
       - name: Smoke test
-        run: ./scripts/smoke-test.sh
+        run: bash scripts/smoke-test.sh
 
       - name: API logs
         if: failure()

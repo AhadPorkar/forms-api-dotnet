@@ -36,7 +36,7 @@ Requirements: Docker. For development without Docker you need the .NET 10 SDK an
 
 ```bash
 docker compose up -d --build
-./scripts/smoke-test.sh          # end-to-end check: create, publish, autosave, submit, query
+bash scripts/smoke-test.sh       # end-to-end check: create, publish, autosave, submit, query
 ```
 
 Open <http://localhost:8080/scalar> for the interactive API reference. The OpenAPI document is at

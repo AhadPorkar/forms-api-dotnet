@@ -12,7 +12,7 @@
 dotnet test                                    # both projects; Docker must be running
 dotnet test tests/Forms.Core.Tests             # unit tests only, no Docker needed
 dotnet test --collect:"XPlat Code Coverage"    # Cobertura coverage, as in CI
-docker compose up -d --build && ./scripts/smoke-test.sh
+docker compose up -d --build && bash scripts/smoke-test.sh
 ```
 
 ## Unit tests

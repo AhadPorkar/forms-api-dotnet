@@ -37,7 +37,7 @@ Voraussetzung: Docker. Für die Entwicklung ohne Docker brauchen Sie das .NET 10
 
 ```bash
 docker compose up -d --build
-./scripts/smoke-test.sh          # End-to-End-Prüfung: anlegen, veröffentlichen, zwischenspeichern, einreichen, abfragen
+bash scripts/smoke-test.sh       # End-to-End-Prüfung: anlegen, veröffentlichen, zwischenspeichern, einreichen, abfragen
 ```
 
 Die interaktive API-Referenz finden Sie unter <http://localhost:8080/scalar>, das OpenAPI-Dokument unter
