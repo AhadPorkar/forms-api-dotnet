@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Forms.Api/Forms.Api.csproj" />
+    <Project Path="src/Forms.Core/Forms.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Forms.Api.IntegrationTests/Forms.Api.IntegrationTests.csproj" />
+    <Project Path="tests/Forms.Core.Tests/Forms.Core.Tests.csproj" />
+  </Folder>
+</Solution>

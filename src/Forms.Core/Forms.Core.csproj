@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Forms.Core</RootNamespace>
+    <Description>Form schema model, validation engine and schema compatibility analysis. No infrastructure dependencies.</Description>
+  </PropertyGroup>
+</Project>
