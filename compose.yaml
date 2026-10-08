@@ -1,0 +1,33 @@
+name: forms-api
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: forms
+      POSTGRES_USER: forms
+      POSTGRES_PASSWORD: forms
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forms -d forms"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    build: .
+    image: ghcr.io/ahadporkar/forms-api-dotnet:local
+    environment:
+      ConnectionStrings__Forms: "Host=postgres;Port=5432;Database=forms;Username=forms;Password=forms"
+      Forms__ApplyMigrationsOnStartup: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
