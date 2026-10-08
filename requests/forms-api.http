@@ -1,0 +1,98 @@
+### Forms API: manual requests
+### Works in Visual Studio, Rider and VS Code (REST Client). Start the API with `docker compose up -d --build`.
+
+@baseUrl = http://localhost:8080
+@form = leave-request
+
+### 1. Create the form (version 1 becomes a draft)
+POST {{baseUrl}}/api/forms
+Content-Type: application/json
+
+< ../samples/leave-request.form.json
+
+### 2. Try the draft schema before publishing
+POST {{baseUrl}}/api/forms/{{form}}/validate?version=draft
+Content-Type: application/json
+
+{ "data": { "employeeName": "Jane Doe", "leaveType": "other" } }
+
+### 3. Publish version 1
+POST {{baseUrl}}/api/forms/{{form}}/versions/draft/publish
+
+### 4. Submit directly
+POST {{baseUrl}}/api/forms/{{form}}/submissions
+Content-Type: application/json
+
+{
+  "data": {
+    "employeeName": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "leaveType": "annual",
+    "startDate": "2026-12-21",
+    "endDate": "2026-12-31",
+    "workingDays": 7,
+    "notify": ["manager", "team"]
+  }
+}
+
+### 5. An invalid submission: every problem comes back with a code
+POST {{baseUrl}}/api/forms/{{form}}/submissions
+Content-Type: application/json
+
+{ "data": { "employeeName": "J", "leaveType": "sick", "workingDays": 5, "salary": 1 } }
+
+### 6. Autosave: start a draft. Copy the id and the ETag header from the response.
+POST {{baseUrl}}/api/forms/{{form}}/drafts
+Content-Type: application/json
+
+{ "data": { "employeeName": "Jane Doe", "leaveType": "sick" } }
+
+### 7. Autosave: save again (replace the id and the ETag)
+PUT {{baseUrl}}/api/drafts/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+If-Match: "0"
+
+{
+  "data": {
+    "employeeName": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "leaveType": "sick",
+    "startDate": "2026-11-02",
+    "endDate": "2026-11-06",
+    "workingDays": 5,
+    "certificateNumber": "AB-123456"
+  }
+}
+
+### 8. Autosave: submit the draft
+POST {{baseUrl}}/api/drafts/00000000-0000-0000-0000-000000000000/submit
+
+### 9. Version 2 removes a field: the response lists the change as breaking
+PUT {{baseUrl}}/api/forms/{{form}}/versions/draft
+Content-Type: application/json
+
+{
+  "schema": {
+    "fields": [
+      { "key": "employeeName", "label": "Full name", "type": "text", "required": true },
+      { "key": "email", "label": "Work email", "type": "email", "required": true },
+      { "key": "leaveType", "label": "Type of leave", "type": "select", "required": true,
+        "options": [ { "value": "annual", "label": "Annual leave" }, { "value": "sick", "label": "Sick leave" } ] },
+      { "key": "startDate", "label": "First day", "type": "date", "required": true },
+      { "key": "endDate", "label": "Last day", "type": "date", "required": true },
+      { "key": "workingDays", "label": "Working days", "type": "integer", "required": true }
+    ]
+  }
+}
+
+### 10. Publishing a breaking draft returns 409 ...
+POST {{baseUrl}}/api/forms/{{form}}/versions/draft/publish
+
+### 11. ... unless it is confirmed
+POST {{baseUrl}}/api/forms/{{form}}/versions/draft/publish?acceptBreakingChanges=true
+
+### 12. Compare any two versions
+GET {{baseUrl}}/api/forms/{{form}}/versions/compare?from=1&to=2
+
+### 13. Query submissions by content (JSONB containment, GIN index)
+GET {{baseUrl}}/api/forms/{{form}}/submissions?filter=%7B%22leaveType%22%3A%22annual%22%7D&limit=20
