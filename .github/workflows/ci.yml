@@ -63,6 +63,10 @@ jobs:
         with:
           global-json-file: global.json
 
+      # dotnet-ef builds the project but does not restore it first.
+      - name: Restore
+        run: dotnet restore src/Forms.Api
+
       - name: Fail if the model has changes without a migration
         run: |
           dotnet tool restore
